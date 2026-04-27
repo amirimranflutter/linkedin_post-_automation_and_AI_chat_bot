@@ -1,5 +1,5 @@
 import '../models/message_model.dart';
-import 'openrouter_service.dart';
+import 'openrouter_service_chat_AI.dart';
 
 class ChatAiService {
   final OpenRouterService _openRouterService;
