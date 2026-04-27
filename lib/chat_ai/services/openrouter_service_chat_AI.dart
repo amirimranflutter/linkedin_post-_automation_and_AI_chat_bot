@@ -14,7 +14,7 @@ class OpenRouterService {
     String? model,
   })  : baseUrl = baseUrl ?? dotenv.env['OPENROUTER_BASE_URL'] ?? 'https://openrouter.ai/api/v1',
         apiKey = apiKey ?? dotenv.env['OPENROUTER_API_KEY'] ?? '',
-        model = model ?? dotenv.env['OPENROUTER_MODEL'] ?? 'meta-llama/llama-3-8b-instruct:free';
+        model = model ?? dotenv.env['OPENROUTER_MODEL'] ?? 'openai/gpt-oss-120b:free';
 
   Future<String> generateResponse(String userMessage) async {
     print('🔵 [OpenRouterService.generateResponse] Starting...');
@@ -153,18 +153,18 @@ class OpenRouterService {
         try {
           final data = jsonDecode(response.body);
           final choices = data['choices'] as List<dynamic>?;
-          
+
           if (choices == null || choices.isEmpty) {
             print('🔴 [OpenRouterService] ERROR: No choices in response');
             return 'No response from AI - empty choices array';
           }
-          
+
           final content = choices[0]['message']['content'];
           if (content == null || content.toString().trim().isEmpty) {
             print('🔴 [OpenRouterService] ERROR: Empty content in response');
             return 'AI returned empty response';
           }
-          
+
           print('🟢 [OpenRouterService] SUCCESS: Generated content length: ${content.toString().length}');
           return content.toString();
         } catch (e) {
