@@ -7,6 +7,8 @@ import '../widgets/post_preview_card.dart';
 import '../widgets/topic_selector.dart';
 import '../widgets/time_picker_button.dart';
 import '../widgets/post_queue_card.dart';
+import '../widgets/linkedin_status_widget.dart';
+import 'post_queue_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -98,8 +100,40 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void _openQueueScreen() {
+    print('🟣 [HomeScreen] Opening queue screen with ${_postQueue.length} posts');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PostQueueScreen(
+          posts: _postQueue,
+          onPostsUpdated: (updatedPosts) {
+            setState(() {
+              _postQueue.clear();
+              _postQueue.addAll(updatedPosts);
+            });
+            print('🟢 [HomeScreen] Queue updated with ${_postQueue.length} posts');
+          },
+        ),
+      ),
+    );
+  }
+
   Future<void> _scheduleAllPosts() async {
     if (_postQueue.isEmpty) return;
+
+    // Check configuration first
+    if (!_backendRepository.isConfigured()) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Backend not configured. Please check APPS_SCRIPT_URL and APPS_SCRIPT_SECRET in .env file'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5),
+        ),
+      );
+      return;
+    }
 
     setState(() => _isScheduling = true);
 
@@ -110,7 +144,10 @@ class _HomeScreenState extends State<HomeScreen> {
     if (success) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('All posts scheduled successfully!')),
+        const SnackBar(
+          content: Text('All posts scheduled successfully!'),
+          backgroundColor: Colors.green,
+        ),
       );
       setState(() {
         _postQueue.clear();
@@ -118,7 +155,10 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to schedule posts.')),
+        const SnackBar(
+          content: Text('Failed to schedule posts. Check console for details.'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
@@ -161,6 +201,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
+                  const LinkedInStatusWidget(),
+                  const SizedBox(height: 24),
                   TopicSelector(
                     topics: _predefinedTopics,
                     selectedTopic: _selectedTopic,
@@ -245,6 +287,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const Spacer(),
                         ElevatedButton.icon(
+                          onPressed: () => _openQueueScreen(),
+                          icon: const Icon(Icons.visibility, size: 18),
+                          label: const Text('View Queue'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.purple.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton.icon(
                           onPressed: _isScheduling ? null : _scheduleAllPosts,
                           icon: _isScheduling
                               ? const SizedBox(
@@ -262,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 16),
                     ...List.generate(_postQueue.length, (index) {
-                      return PostQueueCard(
+                      return PostQueueCardWidget(
                         post: _postQueue[index],
                         onRemove: () => _removeFromQueue(index),
                       );
