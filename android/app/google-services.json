@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "671959748735",
+    "project_id": "ai-automation-52b2b",
+    "storage_bucket": "ai-automation-52b2b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671959748735:android:3ce4a2719ca335606fef4a",
+        "android_client_info": {
+          "package_name": "com.bvoir.linkedin_auto_poster"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8p1jDbmPm8-X9FyXSHjUsy3fBidCVNbc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
