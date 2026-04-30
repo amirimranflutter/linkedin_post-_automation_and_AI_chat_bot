@@ -27,8 +27,17 @@ class AppConstants {
   }
 
   // Apps Script
-  static String get appsScriptUrl => dotenv.env['APPS_SCRIPT_URL'] ?? '';
-  static String get appsScriptSecret => dotenv.env['APPS_SCRIPT_SECRET'] ?? '';
+  static String get appsScriptUrl {
+    final url = dotenv.env['APPS_SCRIPT_URL'] ?? '';
+    print('🔧 [AppConstants] Apps Script URL: ${url.isNotEmpty ? url : 'NOT CONFIGURED'}');
+    return url;
+  }
+  
+  static String get appsScriptSecret {
+    final secret = dotenv.env['APPS_SCRIPT_SECRET'] ?? '';
+    print('🔧 [AppConstants] Apps Script Secret: ${secret.isNotEmpty ? 'CONFIGURED (${secret.length} chars)' : 'NOT CONFIGURED'}');
+    return secret;
+  }
 
   // Colors
   static const String linkedinBlue = '#0A66C2';
