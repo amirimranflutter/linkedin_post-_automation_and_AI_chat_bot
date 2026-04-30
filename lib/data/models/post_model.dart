@@ -55,4 +55,11 @@ class PostModel {
   }
 }
 
-enum PostStatus { draft, queued, scheduled, posted, failed }
+enum PostStatus { 
+  draft,      // Not scheduled, can be edited
+  queued,     // Ready to be scheduled
+  paused,     // Temporarily paused from scheduling
+  scheduled,  // Sent to backend for scheduling
+  posted,     // Successfully posted
+  failed      // Failed to post
+}
