@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/theme.dart';
-import 'presentation/screens/home_screen.dart';
+import 'presentation/screens/auth_screen.dart';
 
 class LinkedInAutoPosterApp extends StatelessWidget {
   const LinkedInAutoPosterApp({super.key});
@@ -11,7 +11,7 @@ class LinkedInAutoPosterApp extends StatelessWidget {
       title: 'LinkedIn Auto Poster',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
-      home: const HomeScreen(),
+      home: const AuthScreen(),
     );
   }
 }
